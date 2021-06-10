@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: microblog-auth
+          uri: http://microblog-auth:8082
+          predicates:
+            - Path=/api/token,/api/token/**,
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - id: microblog-backend
+          uri: http://microblog-backend:8081
+          predicates:
+            - Path=/api/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
